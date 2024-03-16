@@ -11,6 +11,16 @@ const Upload = () => {
     const [sixteenImages, setSixteenImages] = useState([]);
     const [antiFullImages, setAntiFullImages] = useState([]);
 
+
+    // console.log("squareImages,", squareImages)
+    // console.log("threeImages", threeImages)
+    // console.log("nineImages", nineImages)
+    // console.log("fullImages", fullImages)
+    // console.log("fourImages", fourImages)
+    // console.log("sixteenImages", sixteenImages)
+    // console.log("antiFullImages", antiFullImages)
+
+
     const uploadToImgbb = async formData => {
         const response = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imagebb_api}`, formData);
         const uploadedImageUrl = response.data.data.url;
@@ -76,7 +86,7 @@ const Upload = () => {
             await uploadImagesAndGetUrls(sixteenImages, links.sixteen, "sixteen");
             await uploadImagesAndGetUrls(antiFullImages, links.antiFull, "antiFull");
 
-            axios.post("https://kitty-backend-cw0c2k2tt-wannabepros-projects.vercel.app/links", { links })
+            axios.post("https://kitty-backend-5zkctsu2u-wannabepros-projects.vercel.app/links", { links })
                 .then(response => {
                     console.log('Post successful');
                     console.log('Response:', response.data);
@@ -112,20 +122,21 @@ const Upload = () => {
                     const aspectRatio = await getImageAspectRatio(file);
                     console.log('Aspect ratio:', aspectRatio);
                     const imageObj = { url: reader.result, file };
-                    if (Math.abs(aspectRatio - 1) < 0.1) {
-                        newSquareImages.push(imageObj);
-                    } else if (Math.abs(aspectRatio - 0.75) < 0.1) {
-                        newThreeImages.push(imageObj);
-                    } else if (Math.abs(aspectRatio - 1.77) < 0.1) {
-                        newNineImages.push(imageObj);
-                    } else if (Math.abs(aspectRatio - 1.33) < 0.1) {
-                        newFullImages.push(imageObj);
-                    } else if (Math.abs(aspectRatio - 0.75) > Math.abs(aspectRatio - 1.33)) {
-                        newFourImages.push(imageObj);
-                    } else if (Math.abs(aspectRatio - 1.77) > Math.abs(aspectRatio - 0.75)) {
-                        newSixteenImages.push(imageObj);
-                    } else {
+
+                    if (aspectRatio.toFixed(2) >= 2.0) {
                         newAntiFullImages.push(imageObj);
+                    } else if (aspectRatio.toFixed(2) >= 1.7) {
+                        newSixteenImages.push(imageObj);
+                    } else if (aspectRatio.toFixed(2) >= 1.2) {
+                        newFourImages.push(imageObj);
+                    } else if (aspectRatio.toFixed(2) >= 0.9) {
+                        newSquareImages.push(imageObj);
+                    } else if (aspectRatio.toFixed(2) >= 0.7) {
+                        newThreeImages.push(imageObj);
+                    } else if (aspectRatio.toFixed(2) >= 0.5) {
+                        newNineImages.push(imageObj);
+                    } else {
+                        newFullImages.push(imageObj);
                     }
 
                     if (i === files.length - 1) {
@@ -191,8 +202,8 @@ const Upload = () => {
 
 
     return (
-        <div className="mx-auto">
-            <form onSubmit={handleSubmit}> {/* Use onSubmit instead of action */}
+        <div className="mx-auto pt-10">
+            <form className='flex flex-col items-center' onSubmit={handleSubmit}> {/* Use onSubmit instead of action */}
                 <input type="file" className="file-input text-white file-input-bordered file-input-error w-full max-w-xs" onChange={handleFileChange} multiple />
                 <br />
                 <br />
@@ -202,7 +213,7 @@ const Upload = () => {
                     {squareImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveSquareImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[4px] m-1 right-0' onClick={() => handleRemoveSquareImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -210,7 +221,7 @@ const Upload = () => {
                     {threeImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveThreeImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveThreeImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -218,7 +229,7 @@ const Upload = () => {
                     {nineImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveNineImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveNineImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -226,7 +237,7 @@ const Upload = () => {
                     {fullImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveFullImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveFullImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -234,7 +245,7 @@ const Upload = () => {
                     {fourImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveFourImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveFourImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -242,7 +253,7 @@ const Upload = () => {
                     {sixteenImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveSixteenImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveSixteenImage(index)}>✕</button>
                         </div>
                     ))}
 
@@ -250,7 +261,7 @@ const Upload = () => {
                     {antiFullImages.map((image, index) => (
                         <div key={index} className='relative w-fit my-2'>
                             <img src={image.url} className='rounded' alt={`Uploaded ${index}`} style={{ maxWidth: '100%' }} />
-                            <button type="button" className='absolute top-0 bg-white rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveAntiFullImage(index)}>✕</button>
+                            <button type="button" className='absolute top-0 hover:bg-[#3333] rounded-full px-[5px] m-1 right-0' onClick={() => handleRemoveAntiFullImage(index)}>✕</button>
                         </div>
                     ))}
 
