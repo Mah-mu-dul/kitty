@@ -76,7 +76,7 @@ const Upload = () => {
             await uploadImagesAndGetUrls(sixteenImages, links.sixteen, "sixteen");
             await uploadImagesAndGetUrls(antiFullImages, links.antiFull, "antiFull");
 
-            axios.post("http://localhost:5000/links", { links })
+            axios.post("https://kitty-backend-cw0c2k2tt-wannabepros-projects.vercel.app/links", { links })
                 .then(response => {
                     console.log('Post successful');
                     console.log('Response:', response.data);

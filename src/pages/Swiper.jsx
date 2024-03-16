@@ -26,7 +26,7 @@ function SwiperPage() {
         }
     ])
     useEffect(() => {
-        fetch('http://localhost:5000/images')
+        fetch('https://kitty-backend-cw0c2k2tt-wannabepros-projects.vercel.app/images')
             .then(res => res.json())
             .then(data => data ? setImages(data) : "")
 
