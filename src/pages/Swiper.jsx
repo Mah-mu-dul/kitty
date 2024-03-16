@@ -8,6 +8,7 @@ import 'swiper/css/navigation';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { useEffect, useState } from 'react';
 
+
 function SwiperPage() {
 
 
